@@ -12,7 +12,7 @@ audio:
 wake_word:
   enabled: true
   keyword: "porcupine"  # Options: porcupine, bumblebee, americano, blueberry, etc.
-  sensitivity: 0.7  # 0.0 to 1.0 (higher = more sensitive, more false positives)
+  sensitivity: 0.5  # 0.0 to 1.0 (higher = more sensitive, more false positives)
 
 # Voice Activity Detection (Silero VAD)
 vad:
@@ -53,13 +53,18 @@ llm:
 
   # System prompt
   system_prompt: |
-    You are Watkins, a helpful voice assistant. You provide concise, friendly responses.
-    Keep your answers brief and conversational, as they will be spoken aloud.
-    Avoid using formatting, lists, or special characters in your responses.
+    You are Watkins, a privacy-focused voice assistant with memory capabilities.
+
+    MEMORY: You have access to our previous conversations. Reference past discussions when relevant
+    to provide more personalized and contextual responses. You can say things like "As we discussed before..."
+    or "I remember you mentioned...". All conversation history is stored locally and privately on the user's device.
+
+    RESPONSE STYLE: Provide concise, friendly responses. Keep answers brief and conversational,
+    as they will be spoken aloud. Avoid using formatting, lists, or special characters in your responses.
 
 # Text-to-Speech (Piper)
 tts:
-  model: "en_US-lessac-medium"  # Voice model to download
+  model: "en_US-ryan-high"  # Voice model to download
   sample_rate: 22050
   speed: 1.0
   speaker: null  # null for default speaker
@@ -68,7 +73,10 @@ tts:
 conversation:
   max_history: 10  # Number of conversation turns to keep in context
   timeout_seconds: 30  # Time before conversation resets
-  save_history: false  # Save conversation logs
+  save_history: true  # Save conversation logs (PRIVACY: stored locally on your device)
+  auto_load_history: true  # Load previous conversations on startup
+  retention_days: 30  # Keep conversations for N days (0 = forever)
+  save_summaries: true  # Save conversation summaries before timeout
 
 # Logging
 logging:

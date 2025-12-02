@@ -179,7 +179,11 @@ class Watkins:
         self.conversation = ConversationManager(
             max_history=conv_config.get("max_history", 10),
             timeout_seconds=conv_config.get("timeout_seconds", 30),
-            save_history=conv_config.get("save_history", False)
+            save_history=conv_config.get("save_history", False),
+            auto_load_history=conv_config.get("auto_load_history", False),
+            retention_days=conv_config.get("retention_days", 30),
+            save_summaries=conv_config.get("save_summaries", False),
+            llm_client=self.llm  # Pass LLM client for generating summaries
         )
 
     def listen_for_speech(self) -> str:
@@ -327,6 +331,9 @@ class Watkins:
                     # Clear audio buffer
                     self.audio.clear_audio_queue()
 
+                    # Clear wake word detector's internal buffer
+                    self.wake_detector.reset_buffer()
+
                     # Enter conversation mode
                     conversation_active = True
                     conversation_timeout = 5  # seconds
@@ -366,6 +373,11 @@ class Watkins:
                             # 5 seconds passed with no speech, exit conversation mode
                             self.logger.info("No follow-up detected, returning to wake word mode")
                             conversation_active = False
+
+                    # Add debounce cooldown to prevent immediate re-triggering
+                    time.sleep(1.0)
+                    self.wake_detector.reset_buffer()
+                    self.audio.clear_audio_queue()
 
         finally:
             self.audio.stop_recording()

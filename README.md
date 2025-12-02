@@ -4,6 +4,7 @@ A powerful, privacy-focused voice assistant built for Raspberry Pi 5, featuring 
 
 ## Features
 
+- **Privacy-First Memory**: Remembers all conversations locally on your device (never in the cloud)
 - **Wake Word Detection**: Hands-free activation with "Porcupine" or other wake words
 - **Speech-to-Text**: Fast, accurate transcription using Faster-Whisper
 - **Hybrid LLM**: Switch between local (Ollama) and cloud (Anthropic Claude) models
@@ -11,6 +12,55 @@ A powerful, privacy-focused voice assistant built for Raspberry Pi 5, featuring 
 - **Voice Activity Detection**: Intelligent speech boundary detection with Silero VAD
 - **Conversation Context**: Maintains conversation history for natural interactions
 - **Privacy-Focused**: Can run completely offline with local models
+
+## Privacy-First Memory
+
+Unlike Alexa and other cloud-based assistants, Watkins stores your conversations **locally on your Raspberry Pi**. Your privacy is protected:
+
+- ✅ **Local Storage Only**: All conversations saved to your device, never uploaded to the cloud
+- ✅ **Persistent Memory**: Watkins remembers previous conversations across sessions
+- ✅ **Intelligent Summaries**: Automatically summarizes conversations for easy reference
+- ✅ **Configurable Retention**: Keep conversations for 30 days, 90 days, or forever
+- ✅ **Full Control**: View, search, and export your conversation history anytime
+- ✅ **Open Source**: You control your data, no corporate surveillance
+
+### Memory Features
+
+**Automatic Conversation Persistence:**
+- All conversations are automatically saved and loaded on startup
+- Watkins can reference past discussions: "As we talked about before..."
+- Conversation summaries generated using local LLM (to save costs)
+
+**Browse Your History:**
+```bash
+# View recent conversations
+./tools/memory_viewer.py list
+
+# View specific conversation
+./tools/memory_viewer.py view 5
+
+# Search for keywords
+./tools/memory_viewer.py search "weather"
+
+# Export conversation to file
+./tools/memory_viewer.py export 3 conversation.txt
+
+# View statistics
+./tools/memory_viewer.py stats
+```
+
+**Privacy Comparison:**
+
+| Feature | Watkins | Alexa |
+|---------|---------|-------|
+| Storage Location | Local (your Pi) | Amazon's cloud servers |
+| Data Access | You only | Amazon + partners |
+| Retention Control | You decide | Amazon decides |
+| Conversation Export | Yes, anytime | Limited/difficult |
+| Open Source | Yes | No |
+| Cloud Surveillance | Never | Always |
+
+All conversation data is stored in `logs/conversation_full_history.jsonl` on your device. See [PRIVACY.md](PRIVACY.md) for full details.
 
 ## Architecture
 

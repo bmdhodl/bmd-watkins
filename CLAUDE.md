@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Watkins is a privacy-focused voice assistant for Raspberry Pi 5 with hybrid local/cloud LLM support. The architecture follows a modular pipeline: Audio I/O → Wake Word Detection → VAD → STT → LLM → TTS.
+Watkins is a privacy-focused voice assistant for Raspberry Pi 5 with hybrid local/cloud LLM support and persistent memory capabilities. The architecture follows a modular pipeline: Audio I/O → Wake Word Detection → VAD → STT → LLM → TTS.
+
+**Key Differentiator**: Unlike Alexa or Google Assistant, Watkins stores all conversation history locally on the device, with intelligent summaries and full privacy control.
 
 ## Running and Testing
 
@@ -69,11 +71,42 @@ timeout 10 ./watkins.py
 - STT model selection (tiny, base, small, medium)
 - LLM mode (cloud, local, hybrid) and model selection
 - TTS voice model
+- **Memory settings**: save_history, auto_load_history, retention_days, save_summaries
 
 **Environment variables**: `.env` file
 - `ANTHROPIC_API_KEY`: Required for cloud/hybrid LLM mode
 - `PORCUPINE_ACCESS_KEY`: Required for wake word detection
 - Use `.env.template` as reference
+
+## Memory System
+
+**Storage Format**:
+- `logs/conversation_history.json`: Current session state (for quick loading)
+- `logs/conversation_full_history.jsonl`: Complete append-only conversation archive
+- Each conversation includes: messages, timestamps, summary, metadata
+
+**Key Features**:
+- **Persistent Memory**: Conversations automatically saved and loaded on startup
+- **Intelligent Summaries**: Claude generates concise summaries before timeout (configurable)
+- **Privacy-First**: All data stored locally, never in the cloud
+- **Configurable Retention**: Auto-delete conversations older than N days
+- **Search & Export**: Memory viewer tool for browsing history
+
+**Memory Viewer Tool**:
+```bash
+./tools/memory_viewer.py list           # List recent conversations
+./tools/memory_viewer.py view 5         # View specific conversation
+./tools/memory_viewer.py search "topic" # Search for keywords
+./tools/memory_viewer.py export 3 file.txt  # Export to text file
+./tools/memory_viewer.py stats          # Show statistics
+```
+
+**Implementation Details**:
+- ConversationManager handles all memory operations
+- Summaries generated using local LLM (when save_summaries=true) to save API costs
+- Auto-cleanup runs on startup based on retention_days
+- JSONL format allows easy append and parsing
+- System prompt updated to reference available memory
 
 ## Dependencies and Installation
 
