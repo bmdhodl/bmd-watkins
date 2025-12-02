@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:www.raspberrypi.com)",
+      "Bash(sudo apt-get update:*)",
+      "Bash(sudo apt-get install:*)",
+      "Bash(python3:*)",
+      "Bash(./venv/bin/pip install:*)",
+      "Bash(arecord:*)",
+      "Bash(aplay:*)",
+      "Bash(chmod:*)",
+      "Bash(curl:*)",
+      "Bash(sh:*)",
+      "Bash(ollama pull:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(./venv/bin/python:*)",
+      "Bash(timeout 10 ./watkins.py:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nInitial commit: Watkins Voice Assistant\n\nComplete voice assistant implementation for Raspberry Pi 5:\n- Wake word detection (Porcupine)\n- Voice activity detection (Silero VAD)\n- Speech-to-text (Faster-Whisper)\n- Hybrid LLM support (Claude/Ollama)\n- Text-to-speech (Piper)\n- Conversation management with context\n- Audio I/O handling\n- Configuration and documentation\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git config:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

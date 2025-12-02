@@ -1,0 +1,82 @@
+# Watkins Voice Assistant Configuration
+
+# Audio Settings
+audio:
+  sample_rate: 16000
+  channels: 1
+  chunk_size: 512  # Must be 512 for Silero VAD and Porcupine at 16kHz
+  input_device: null  # null = default, or specify device ID
+  output_device: null  # null = default, or specify device ID
+
+# Wake Word Detection (Picovoice Porcupine)
+wake_word:
+  enabled: true
+  keyword: "porcupine"  # Options: porcupine, bumblebee, americano, blueberry, etc.
+  sensitivity: 0.7  # 0.0 to 1.0 (higher = more sensitive, more false positives)
+
+# Voice Activity Detection (Silero VAD)
+vad:
+  enabled: true
+  threshold: 0.5  # 0.0 to 1.0
+  min_speech_duration_ms: 250
+  max_speech_duration_s: 15
+  min_silence_duration_ms: 500
+  speech_pad_ms: 30
+
+# Speech-to-Text (Faster-Whisper)
+stt:
+  model_size: "base"  # Options: tiny, base, small, medium, large
+  device: "cpu"
+  compute_type: "int8"  # int8 for best performance on Pi
+  language: "en"
+  beam_size: 5
+  vad_filter: true
+
+# Language Model (LLM)
+llm:
+  mode: "hybrid"  # Options: cloud, local, hybrid
+
+  # Cloud LLM (Anthropic Claude)
+  cloud:
+    provider: "anthropic"  # Options: anthropic, openai
+    model: "claude-sonnet-4-5-20250929"
+    max_tokens: 150
+    temperature: 0.7
+
+  # Local LLM (Ollama)
+  local:
+    enabled: true
+    host: "http://localhost:11434"
+    model: "tinyllama"
+    temperature: 0.7
+    num_predict: 150
+
+  # System prompt
+  system_prompt: |
+    You are Watkins, a helpful voice assistant. You provide concise, friendly responses.
+    Keep your answers brief and conversational, as they will be spoken aloud.
+    Avoid using formatting, lists, or special characters in your responses.
+
+# Text-to-Speech (Piper)
+tts:
+  model: "en_US-lessac-medium"  # Voice model to download
+  sample_rate: 22050
+  speed: 1.0
+  speaker: null  # null for default speaker
+
+# Conversation Settings
+conversation:
+  max_history: 10  # Number of conversation turns to keep in context
+  timeout_seconds: 30  # Time before conversation resets
+  save_history: false  # Save conversation logs
+
+# Logging
+logging:
+  level: "INFO"  # Options: DEBUG, INFO, WARNING, ERROR
+  file: "logs/watkins.log"
+  console: true
+
+# Performance
+performance:
+  enable_profiling: false
+  target_latency_ms: 500
